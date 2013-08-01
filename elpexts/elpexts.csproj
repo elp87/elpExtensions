@@ -50,6 +50,7 @@
     <Compile Include="CSVWriter.cs" />
     <Compile Include="elpDateParse.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="IniFile.cs" />
     <Compile Include="ListBoxExts.cs" />
     <Compile Include="ListExts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
