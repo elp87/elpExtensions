@@ -7,6 +7,7 @@ namespace elpExtsTests
     public class IniFiles
     {
         [TestMethod]
+        [ExpectedException(typeof(elp.Extensions.IncorrectIniLineException))]
         public void TestMethod1()
         {
             string expectedAppName = "MetaStock Professional";

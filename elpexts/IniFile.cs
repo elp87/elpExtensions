@@ -42,6 +42,7 @@ namespace elp.Extensions
             System.IO.StreamReader file = new System.IO.StreamReader(this._filename);
             while ((line = file.ReadLine()) != null)
             {
+                bool correctLine = false;
                 if (line.Contains("["))
                 {
                     int start = line.IndexOf('[');
@@ -49,6 +50,7 @@ namespace elp.Extensions
                     string sectionName = line.Substring(start + 1, end - start - 1);
                     this.sections.Add(sectionName, new Section());
                     this._curSection = sectionName;
+                    correctLine = true;
                 }
                 if (line.Contains("="))
                 {
@@ -56,7 +58,14 @@ namespace elp.Extensions
                     string key = line.Substring(0, equalsIndex);
                     string value = line.Substring(equalsIndex + 1);
                     this.sections[_curSection].Add(key, value);
+                    correctLine = true;
                 }
+                if (line == "")
+                {
+                    correctLine = true;
+                }
+                if (correctLine == false) throw new IncorrectIniLineException(line + " - не может быть прочитана", "Неверный формат строки", DateTime.Now);
+
             }
         }
         #endregion
@@ -83,7 +92,19 @@ namespace elp.Extensions
             {
                 this.parameters.Add(key, value);
             }
-        }
+        }        
         #endregion
+    }
+    public class IncorrectIniLineException : Exception
+    {
+        public DateTime ErrorTimeStamp { get; set; }
+        public string CauseOfError { get; set; }
+        public IncorrectIniLineException() { }
+        public IncorrectIniLineException(string message, string cause, DateTime time)
+            : base(message)
+        {
+            CauseOfError = cause;
+            ErrorTimeStamp = time;
+        }
     }
 }
