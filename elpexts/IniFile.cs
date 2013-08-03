@@ -39,33 +39,40 @@ namespace elp.Extensions
         private void read()
         {
             string line;
-            System.IO.StreamReader file = new System.IO.StreamReader(this._filename);
-            while ((line = file.ReadLine()) != null)
+            try
             {
-                bool correctLine = false;
-                if (line.Contains("["))
+                System.IO.StreamReader file = new System.IO.StreamReader(this._filename);
+                while ((line = file.ReadLine()) != null)
                 {
-                    int start = line.IndexOf('[');
-                    int end = line.IndexOf(']');
-                    string sectionName = line.Substring(start + 1, end - start - 1);
-                    this.sections.Add(sectionName, new Section());
-                    this._curSection = sectionName;
-                    correctLine = true;
-                }
-                if (line.Contains("="))
-                {
-                    int equalsIndex = line.IndexOf('=');
-                    string key = line.Substring(0, equalsIndex);
-                    string value = line.Substring(equalsIndex + 1);
-                    this.sections[_curSection].Add(key, value);
-                    correctLine = true;
-                }
-                if (line == "")
-                {
-                    correctLine = true;
-                }
-                if (correctLine == false) throw new IncorrectIniLineException(line + " - не может быть прочитана", "Неверный формат строки", DateTime.Now);
+                    bool correctLine = false;
+                    if (line.Contains("["))
+                    {
+                        int start = line.IndexOf('[');
+                        int end = line.IndexOf(']');
+                        string sectionName = line.Substring(start + 1, end - start - 1);
+                        this.sections.Add(sectionName, new Section());
+                        this._curSection = sectionName;
+                        correctLine = true;
+                    }
+                    if (line.Contains("="))
+                    {
+                        int equalsIndex = line.IndexOf('=');
+                        string key = line.Substring(0, equalsIndex);
+                        string value = line.Substring(equalsIndex + 1);
+                        this.sections[_curSection].Add(key, value);
+                        correctLine = true;
+                    }
+                    if (line == "")
+                    {
+                        correctLine = true;
+                    }
+                    if (correctLine == false) throw new IncorrectIniLineException(line + " - не может быть прочитана", "Неверный формат строки", DateTime.Now);
 
+                }
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+                throw new System.IO.FileNotFoundException("Файл не найден", this._filename, ex);
             }
         }
         #endregion

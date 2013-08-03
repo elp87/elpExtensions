@@ -8,14 +8,22 @@ namespace elpExtsTests
     {
         [TestMethod]
         [ExpectedException(typeof(elp.Extensions.IncorrectIniLineException))]
-        public void TestMethod1()
+        public void iniTest()
         {
-            string expectedAppName = "MetaStock Professional";
-            elp.Extensions.IniFile ini = new elp.Extensions.IniFile("D:\\setup.ini");
-            string appName = ini.GetSection("Startup").GetParameter("AppName");
-            string update = ini.GetSection("ISUPDATE").GetParameter("UpdateURL");
+            string expectedAppName = "TradeStat";
+            int expectedNum = 9;
+            elp.Extensions.IniFile ini = new elp.Extensions.IniFile(@"Res\iniTest.ini");
+            string appName = ini.GetSection("Main").GetParameter("AppName");
+            int num = Convert.ToInt32(ini.GetSection("Main").GetParameter("int"));
             Assert.AreEqual(expectedAppName, appName);
-            Assert.AreEqual("http://", update);
+            Assert.AreEqual(expectedNum, num);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(System.IO.FileNotFoundException))]
+        public void IniFileNotFoundTest()
+        {
+            elp.Extensions.IniFile ini = new elp.Extensions.IniFile(@"Res\no.ini");
         }
     }
 }
