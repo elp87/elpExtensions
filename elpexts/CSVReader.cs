@@ -123,7 +123,15 @@ namespace elp.Extensions
         private void readCSV()
         {
             string csvLine;
-            StreamReader file = new StreamReader(this._filename);
+            StreamReader file;
+            try
+            {
+                file = new StreamReader(this._filename);
+            }
+            catch (IOException ex)
+            {
+                throw new IOException(ex.Message, ex);
+            }
             while ((csvLine = file.ReadLine()) != null)
             {
                 _lineList.Add(csvLine);
