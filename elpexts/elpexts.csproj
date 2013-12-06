@@ -44,11 +44,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppExeptions.cs" />
     <Compile Include="CSVReader.cs" />
     <Compile Include="CSVWriter.cs" />
-    <Compile Include="elpDateParse.cs" />
-    <Compile Include="Exceptions.cs" />
+    <Compile Include="CSVExceptions.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="ListExts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -174,7 +174,7 @@ namespace elp.Extensions
                 {
                     _dataList.Add(element);
                 }
-                catch (elpDateTimeParseExeption) { }
+                catch (Exception) { }
             }
         }
         #endregion
