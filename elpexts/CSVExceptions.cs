@@ -43,4 +43,16 @@ namespace elp.Extensions
             ErrorTimeStamp = time;
         }
     }
+
+    [Serializable]
+    public class UnsetBindTypeException : Exception
+    {
+        public UnsetBindTypeException() { }
+        public UnsetBindTypeException(string message) : base(message) { }
+        public UnsetBindTypeException(string message, Exception inner) : base(message, inner) { }
+        protected UnsetBindTypeException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
+    }
 }
