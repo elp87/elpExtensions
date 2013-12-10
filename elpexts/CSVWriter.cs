@@ -61,17 +61,24 @@ namespace elp.Extensions
             _columnsList.Add(new Column(header));
         }
 
-        public void AddColumn(string header, string bind)
+        public void AddColumnProperty(string header, string bind)
         {
             _columnsList.Add(new Column(header, bind));
         }
 
-        public void AddColumn(string header, string bind, object[] args)
+        public void AddColumnMethod(string header, string bind, object[] args)
         {
             _columnsList.Add(new Column(header, bind, args));
         }
 
-        public void SetBind(string header, string bind)
+        public void AddColumnConst(string header, string value)
+        {
+            _columnsList.Add(new Column(header, value, Column.BindType.constBind));
+        }
+
+
+
+        public void SetBindProperty(string header, string bind)
         {
             Column selectColumn = this._columnsList.First(column => column.header == header);
             selectColumn.bind = bind;
@@ -79,14 +86,14 @@ namespace elp.Extensions
 
         }
 
-        public void SetBind(int index, string bind)
+        public void SetBindProperty(int index, string bind)
         {
             Column selectColumn = this._columnsList[index];
             selectColumn.bind = bind;
             selectColumn.bindType = Column.BindType.propertyBind;
         }
 
-        public void SetBind(string header, string bind, object[] args)
+        public void SetBindMethod(string header, string bind, object[] args)
         {
             Column selectColumn = this._columnsList.First(column => column.header == header);
             selectColumn.bind = bind;
@@ -94,7 +101,7 @@ namespace elp.Extensions
             selectColumn.bindType = Column.BindType.methodBind;
         }
 
-        public void SetBind(int index, string bind, object[] args)
+        public void SetBindMethod(int index, string bind, object[] args)
         {
             Column selectColumn = this._columnsList[index];
             selectColumn.bind = bind;
@@ -113,7 +120,7 @@ namespace elp.Extensions
                 string line = this.GenLine(element);
                 lineList.Add(line);
             }
-            File.WriteAllLines(fileName, lineList, Encoding.UTF8);
+            File.WriteAllLines(fileName, lineList, Encoding.UTF8);            
         }
 
         private string GenLine(object obj)
@@ -124,9 +131,24 @@ namespace elp.Extensions
             foreach (Column column in this._columnsList)
             {
                 string cellValue = "";
-                if (column.bindType == Column.BindType.propertyBind) { cellValue = type.GetProperty(column.bind).GetValue(obj, null).ToString(); }
+                switch (column.bindType)
+                {
+                    case Column.BindType.propertyBind:
+                        cellValue = type.GetProperty(column.bind).GetValue(obj, null).ToString();
+                        break;
+                    case Column.BindType.methodBind:
+                        cellValue = type.GetMethod(column.bind).Invoke(obj, column.methodArgs).ToString();
+                        break;
+                    case Column.BindType.constBind:
+                        cellValue = column.bind;
+                        break;
+                    default:
+                        throw new UnsetBindTypeException();
+                }
+
+                /*if (column.bindType == Column.BindType.propertyBind) { cellValue = type.GetProperty(column.bind).GetValue(obj, null).ToString(); }
                 else if (column.bindType == Column.BindType.methodBind) { cellValue = type.GetMethod(column.bind).Invoke(obj, column.methodArgs).ToString(); }
-                else throw new UnsetBindTypeException();
+                else throw new UnsetBindTypeException();*/
                 line.Append(cellValue);
                 line.Append(_separator);
 
@@ -171,6 +193,13 @@ namespace elp.Extensions
                 this.bindType = BindType.methodBind;
             }
 
+            public Column(string header, string bind, BindType bindType)
+            {
+                this.header = header;
+                this.bind = bind;
+                this.bindType = bindType;
+            }
+
             public string header { get; set; }
             public string bind { get; set; }
             public object[] methodArgs { get; set; }
@@ -179,7 +208,8 @@ namespace elp.Extensions
             public enum BindType
             {
                 propertyBind,
-                methodBind
+                methodBind,
+                constBind
             }            
         }
         #endregion

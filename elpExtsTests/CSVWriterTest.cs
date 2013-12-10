@@ -31,9 +31,16 @@ namespace elpExtsTests
             l.Add(new MyClass(7));
 
             CSVWriter csvw = new CSVWriter(l);
-            csvw.AddColumn("prop", "myProperty");
-            csvw.AddColumn("method", "myMethod", new object[] { 5 });
-            csvw.SaveFile("test.csv");
+            csvw.AddColumnProperty("prop", "myProperty");
+            csvw.AddColumnMethod("method", "myMethod", new object[] { 5 });
+            csvw.AddColumnConst("const", "const value");
+            try
+            {
+                csvw.SaveFile("test.csv");
+            }
+            catch (System.IO.IOException ex)
+            {
+            }
         }
     }
 }
