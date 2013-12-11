@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 namespace elp.Extensions
-{    
+{
     public class CSVReader : IEnumerable
     {
         #region Поля
@@ -30,7 +30,7 @@ namespace elp.Extensions
 
         private CSVReader()
             : this(';')
-        { }        
+        { }
 
         public CSVReader(string filename, IList dataList, char separator)
             : this(separator)
@@ -78,7 +78,7 @@ namespace elp.Extensions
                 {
                     return true;
                 }
-                throw new ElpInvalidHeaderException("Передано неверное значение индекса первой строки", "Индекс первой строки должен быть 0 или 1", DateTime.Now); 
+                throw new ElpInvalidHeaderException("Передано неверное значение индекса первой строки", "Индекс первой строки должен быть 0 или 1", DateTime.Now);
             }
             set
             {
@@ -107,12 +107,19 @@ namespace elp.Extensions
         #region Public
         public void AddColumn(string bind, int index)
         {
-            Column newColumn = new Column(bind, index);
+            Column newColumn = new Column(bind, index, Column.BindTypes.PropertyBind);
             newColumn.source = this._dataList;
             this._columnList.Add(newColumn);
         }
 
-        
+        public void AddColumnArray(string bind, int index, int arrayIndex)
+        {
+            Column newColumn = new Column(bind, index, arrayIndex, Column.BindTypes.ArrayBind);
+            newColumn.source = this._dataList;
+            this._columnList.Add(newColumn);
+        }
+
+
         public IEnumerator GetEnumerator()
         {
             return this._lineList.GetEnumerator();
@@ -157,18 +164,41 @@ namespace elp.Extensions
                 foreach (Column column in _columnList)
                 {
                     string val = _csvLineList[i].value(column.index);
+
                     try
                     {
-                        if (column.bindType != typeof(string))
+                        switch (column.bindType)
                         {
-                            elementType.GetProperty(column.bind).SetValue(element, Convert.ChangeType(val, column.bindType), null);
-                        }
-                        else
-                        {
-                            elementType.GetProperty(column.bind).SetValue(element, val, null);
+                            case Column.BindTypes.PropertyBind:
+                                if (column.elementType != typeof(string))
+                                {
+                                    elementType.GetProperty(column.bind).SetValue(element, Convert.ChangeType(val, column.elementType), null);
+                                }
+                                else
+                                {
+                                    elementType.GetProperty(column.bind).SetValue(element, val, null);
+                                }
+                                break;
+                            case Column.BindTypes.ArrayBind:
+                                Array tempArray = (Array)elementType.GetProperty(column.bind).GetValue(element, new object[] {});
+                                Type arrayType = tempArray.GetType();
+                                Type arrayElementType = arrayType.GetElementType();
+                                
+                                if (column.elementType != typeof(string))
+                                {
+                                    arrayType.GetMethod("SetValue", new Type[] { arrayElementType, typeof(int) }).Invoke(tempArray, new object[] { Convert.ChangeType(val, arrayElementType), column.arrayIndex });                                    
+                                    
+                                }
+                                else
+                                {
+                                    // TODO: Протестировать эту ветку
+                                    arrayType.GetMethod("SetValue", new Type[] { arrayElementType, typeof(int) }).Invoke(tempArray, new object[] {val, column.arrayIndex });
+                                }
+                                break;
                         }
                     }
                     catch (Exception) { }
+
                 }
                 try
                 {
@@ -183,16 +213,28 @@ namespace elp.Extensions
         #region Подклассы
         private class Column
         {
-            private IList _parentList;
-
-            public Column(string bind, int index)
+            private IList _parentList;            
+            
+            public Column(string bind, int index, BindTypes bindType)
             {
                 this.bind = bind;
                 this.index = index;
+                this.bindType = bindType;
             }
 
-            public string bind { get; set; }
-            public int index { get; set; }
+            public Column(string bind, int index, int arrayIndex, BindTypes bindType)
+            {
+                this.bind = bind;
+                this.index = index;
+                this.arrayIndex = arrayIndex;
+                this.bindType = bindType;
+            }
+
+            public string bind { get; private set; }
+            public int index { get; private set; }
+            public BindTypes bindType { get; private set; }
+            public int arrayIndex { get; set; }
+
             public IList source
             {
                 get
@@ -204,7 +246,7 @@ namespace elp.Extensions
                     _parentList = value;
                 }
             }
-            public Type bindType
+            public Type elementType
             {
                 get
                 {
@@ -214,6 +256,15 @@ namespace elp.Extensions
                     return propType;
                 }
             }
+
+            public enum BindTypes
+            {
+                PropertyBind,
+                ArrayBind,
+                ArrayNestedProperty
+            }
+
+            
         }
 
         public class CSVLine

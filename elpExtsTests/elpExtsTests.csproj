@@ -53,6 +53,7 @@
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CSVWriterTest.cs" />
+    <Compile Include="CSVReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\elpexts\elpexts.csproj">

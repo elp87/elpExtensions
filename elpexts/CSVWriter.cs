@@ -73,7 +73,7 @@ namespace elp.Extensions
 
         public void AddColumnConst(string header, string value)
         {
-            _columnsList.Add(new Column(header, value, Column.BindType.constBind));
+            _columnsList.Add(new Column(header, value, Column.BindType.ConstBind));
         }
 
 
@@ -82,7 +82,7 @@ namespace elp.Extensions
         {
             Column selectColumn = this._columnsList.First(column => column.header == header);
             selectColumn.bind = bind;
-            selectColumn.bindType = Column.BindType.propertyBind;
+            selectColumn.bindType = Column.BindType.PropertyBind;
 
         }
 
@@ -90,7 +90,7 @@ namespace elp.Extensions
         {
             Column selectColumn = this._columnsList[index];
             selectColumn.bind = bind;
-            selectColumn.bindType = Column.BindType.propertyBind;
+            selectColumn.bindType = Column.BindType.PropertyBind;
         }
 
         public void SetBindMethod(string header, string bind, object[] args)
@@ -98,7 +98,7 @@ namespace elp.Extensions
             Column selectColumn = this._columnsList.First(column => column.header == header);
             selectColumn.bind = bind;
             selectColumn.methodArgs = args;
-            selectColumn.bindType = Column.BindType.methodBind;
+            selectColumn.bindType = Column.BindType.MethodBind;
         }
 
         public void SetBindMethod(int index, string bind, object[] args)
@@ -106,7 +106,7 @@ namespace elp.Extensions
             Column selectColumn = this._columnsList[index];
             selectColumn.bind = bind;
             selectColumn.methodArgs = args;
-            selectColumn.bindType = Column.BindType.methodBind;
+            selectColumn.bindType = Column.BindType.MethodBind;
         }
 
         public void SaveFile(string fileName)
@@ -133,13 +133,13 @@ namespace elp.Extensions
                 string cellValue = "";
                 switch (column.bindType)
                 {
-                    case Column.BindType.propertyBind:
+                    case Column.BindType.PropertyBind:
                         cellValue = type.GetProperty(column.bind).GetValue(obj, null).ToString();
                         break;
-                    case Column.BindType.methodBind:
+                    case Column.BindType.MethodBind:
                         cellValue = type.GetMethod(column.bind).Invoke(obj, column.methodArgs).ToString();
                         break;
-                    case Column.BindType.constBind:
+                    case Column.BindType.ConstBind:
                         cellValue = column.bind;
                         break;
                     default:
@@ -182,7 +182,7 @@ namespace elp.Extensions
             {
                 this.header = header;
                 this.bind = bind;
-                this.bindType = BindType.propertyBind;
+                this.bindType = BindType.PropertyBind;
             }
 
             public Column(string header, string bind, Object[] args)
@@ -190,7 +190,7 @@ namespace elp.Extensions
                 this.header = header;
                 this.bind = bind;
                 this.methodArgs = args;
-                this.bindType = BindType.methodBind;
+                this.bindType = BindType.MethodBind;
             }
 
             public Column(string header, string bind, BindType bindType)
@@ -207,9 +207,9 @@ namespace elp.Extensions
 
             public enum BindType
             {
-                propertyBind,
-                methodBind,
-                constBind
+                PropertyBind,
+                MethodBind,
+                ConstBind
             }            
         }
         #endregion
