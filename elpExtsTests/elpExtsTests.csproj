@@ -62,6 +62,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Res\csvReader-Array.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Res\iniTest.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

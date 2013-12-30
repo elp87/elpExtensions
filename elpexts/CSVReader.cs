@@ -82,6 +82,8 @@ namespace elp.Extensions
             }
             set
             {
+                if (value == true) _firstLine = 1;
+                else _firstLine = 0;
             }
         }
 

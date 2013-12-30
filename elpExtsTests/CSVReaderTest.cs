@@ -28,6 +28,7 @@ namespace elpExtsTests
         {
             List<TestClass> list = new List<TestClass>();
             CSVReader csv = new CSVReader(@"Res\csvReader-Array.csv", list);
+            csv.hasHeader = false;
             csv.AddColumnArray("array", 0, 0);
             csv.AddColumnArray("array", 1, 1);
             csv.AddColumnArray("array", 2, 2);
