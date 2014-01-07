@@ -121,6 +121,13 @@ namespace elp.Extensions
             this._columnList.Add(newColumn);
         }
 
+        public void AddColumnMethod1(string bind, int index)
+        {
+            Column newColumn = new Column(bind, index, Column.BindTypes.Method1Bind);
+            newColumn.source = this._dataList;
+            this._columnList.Add(newColumn);
+        }
+
 
         public IEnumerator GetEnumerator()
         {
@@ -197,6 +204,18 @@ namespace elp.Extensions
                                     arrayType.GetMethod("SetValue", new Type[] { arrayElementType, typeof(int) }).Invoke(tempArray, new object[] {val, column.arrayIndex });
                                 }
                                 break;
+                            case Column.BindTypes.Method1Bind:
+                                MethodInfo method = elementType.GetMethod(column.bind);
+                                Type argType = method.GetParameters()[0].ParameterType;
+                                if (argType != typeof(string))
+                                {
+                                    method.Invoke(element, new object[] { Convert.ChangeType(val, argType) });
+                                }
+                                else
+                                {
+                                    method.Invoke(element, new object[] { val });
+                                }
+                                break;
                         }
                     }
                     catch (Exception) { }
@@ -263,7 +282,8 @@ namespace elp.Extensions
             {
                 PropertyBind,
                 ArrayBind,
-                ArrayNestedProperty
+                //ArrayNestedProperty
+                Method1Bind
             }
 
             

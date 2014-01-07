@@ -23,6 +23,36 @@ namespace elpExtsTests
             }
         }
 
+        private class MethodTestClass
+        {
+            #region Constructors
+            public MethodTestClass() { }
+            public MethodTestClass(string s, int i)
+            {
+                this.propertyS = s;
+                this.propertyI = i;
+            }
+            #endregion
+            #region Properties
+            public string propertyS { get; private set; }
+            public int propertyI { get; private set; }  
+            #endregion
+
+            #region Methods
+            public void SetString(string value)
+            {
+                this.propertyS = value;
+            }
+
+            public void SetInt(int value)
+            {
+                this.propertyI = value;
+            }
+            #endregion
+
+
+        }
+
         [TestMethod]
         public void TestArrays()
         {
@@ -45,6 +75,29 @@ namespace elpExtsTests
             for (int i = 0; i < expList.Count; i++)
             {
                 CollectionAssert.AreEqual(expList[i].array, list[i].array);
+            }
+        }
+
+        [TestMethod]
+        public void TestMethod1()
+        {
+            List<MethodTestClass> list = new List<MethodTestClass>();
+            CSVReader csv = new CSVReader(@"Res\csvReader-Method1.csv", list);
+            csv.hasHeader = false;
+            csv.AddColumnMethod1("SetString", 0);
+            csv.AddColumnMethod1("SetInt", 1);
+            list = (List<MethodTestClass>)csv.finalList;
+
+            List<MethodTestClass> expList = new List<MethodTestClass>();
+            expList.Add(new MethodTestClass("abc", 123));
+            expList.Add(new MethodTestClass("def", 456));
+            expList.Add(new MethodTestClass("ghi", 789));
+
+            Assert.AreEqual(expList.Count, list.Count);
+            for (int i = 0; i < expList.Count; i++)
+            {
+                Assert.AreEqual(expList[i].propertyI, list[i].propertyI);
+                Assert.AreEqual(expList[i].propertyS, list[i].propertyS);
             }
         }
     }
