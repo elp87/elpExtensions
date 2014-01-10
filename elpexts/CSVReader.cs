@@ -128,6 +128,13 @@ namespace elp.Extensions
             this._columnList.Add(newColumn);
         }
 
+        public void AddColumnMethod2(string bind, int index, object additionalArg, bool isAddArgFirst)
+        {
+            Column newColumn = new Column(bind, index, additionalArg, isAddArgFirst, Column.BindTypes.Method2Bind);
+            newColumn.source = this._dataList;
+            this._columnList.Add(newColumn);
+        }
+
 
         public IEnumerator GetEnumerator()
         {
@@ -179,45 +186,70 @@ namespace elp.Extensions
                         switch (column.bindType)
                         {
                             case Column.BindTypes.PropertyBind:
-                                if (column.elementType != typeof(string))
                                 {
-                                    elementType.GetProperty(column.bind).SetValue(element, Convert.ChangeType(val, column.elementType), null);
+                                    if (column.elementType != typeof(string))
+                                    {
+                                        elementType.GetProperty(column.bind).SetValue(element, Convert.ChangeType(val, column.elementType), null);
+                                    }
+                                    else
+                                    {
+                                        elementType.GetProperty(column.bind).SetValue(element, val, null);
+                                    }
+                                    break;
                                 }
-                                else
-                                {
-                                    elementType.GetProperty(column.bind).SetValue(element, val, null);
-                                }
-                                break;
                             case Column.BindTypes.ArrayBind:
-                                Array tempArray = (Array)elementType.GetProperty(column.bind).GetValue(element, new object[] {});
-                                Type arrayType = tempArray.GetType();
-                                Type arrayElementType = arrayType.GetElementType();
-                                
-                                if (column.elementType != typeof(string))
                                 {
-                                    arrayType.GetMethod("SetValue", new Type[] { arrayElementType, typeof(int) }).Invoke(tempArray, new object[] { Convert.ChangeType(val, arrayElementType), column.arrayIndex });                                    
-                                    
+                                    Array tempArray = (Array)elementType.GetProperty(column.bind).GetValue(element, new object[] { });
+                                    Type arrayType = tempArray.GetType();
+                                    Type arrayElementType = arrayType.GetElementType();
+
+                                    if (column.elementType != typeof(string))
+                                    {
+                                        arrayType.GetMethod("SetValue", new Type[] { arrayElementType, typeof(int) }).Invoke(tempArray, new object[] { Convert.ChangeType(val, arrayElementType), column.arrayIndex });
+
+                                    }
+                                    else
+                                    {
+                                        // TODO: Протестировать эту ветку
+                                        arrayType.GetMethod("SetValue", new Type[] { arrayElementType, typeof(int) }).Invoke(tempArray, new object[] { val, column.arrayIndex });
+                                    }
+                                    break;
                                 }
-                                else
-                                {
-                                    // TODO: Протестировать эту ветку
-                                    arrayType.GetMethod("SetValue", new Type[] { arrayElementType, typeof(int) }).Invoke(tempArray, new object[] {val, column.arrayIndex });
-                                }
-                                break;
                             case Column.BindTypes.Method1Bind:
-                                MethodInfo method = elementType.GetMethod(column.bind);
-                                Type argType = method.GetParameters()[0].ParameterType;
-                                if (argType != typeof(string))
                                 {
-                                    method.Invoke(element, new object[] { Convert.ChangeType(val, argType) });
+                                    MethodInfo method = elementType.GetMethod(column.bind);
+                                    Type argType = method.GetParameters()[0].ParameterType;
+                                    if (argType != typeof(string))
+                                    {
+                                        method.Invoke(element, new object[] { Convert.ChangeType(val, argType) });
+                                    }
+                                    else
+                                    {
+                                        method.Invoke(element, new object[] { val });
+                                    }
+                                    break;
                                 }
-                                else
+                            case Column.BindTypes.Method2Bind:
                                 {
-                                    method.Invoke(element, new object[] { val });
+                                    Type mainArgType;
+                                    Type addArgType = column.additionalArg.GetType();
+                                    MethodInfo method = elementType.GetMethod(column.bind);
+                                    if (column.isAddArgFirst)
+                                    {
+                                        mainArgType = method.GetParameters()[1].ParameterType;
+                                        method.Invoke(element, new object[] { Convert.ChangeType(column.additionalArg, addArgType), Convert.ChangeType(val, mainArgType) });
+                                    }
+                                    else
+                                    {
+                                        // TODO: Протестировать этот вариант
+                                        mainArgType = method.GetParameters()[0].ParameterType;
+                                        method.Invoke(element, new object[] { Convert.ChangeType(val, mainArgType), Convert.ChangeType(column.additionalArg, addArgType) });
+                                    }
+                                    break;
                                 }
-                                break;
                         }
                     }
+                        // TODO: Очень странная обработка исключения
                     catch (Exception) { }
 
                 }
@@ -225,6 +257,7 @@ namespace elp.Extensions
                 {
                     _dataList.Add(element);
                 }
+                    // TODO: Еще одна странная обработка исключения
                 catch (Exception) { }
             }
         }
@@ -251,10 +284,21 @@ namespace elp.Extensions
                 this.bindType = bindType;
             }
 
+            public Column(string bind, int index, object additionalArg, bool isAddArgFirst, BindTypes bindType)
+            {
+                this.bind = bind;
+                this.index = index;
+                this.additionalArg = additionalArg;
+                this.isAddArgFirst = isAddArgFirst;
+                this.bindType = bindType;
+            }
+
             public string bind { get; private set; }
             public int index { get; private set; }
             public BindTypes bindType { get; private set; }
             public int arrayIndex { get; set; }
+            public object additionalArg { get; private set; }
+            public bool isAddArgFirst { get; private set; }
 
             public IList source
             {
@@ -282,11 +326,9 @@ namespace elp.Extensions
             {
                 PropertyBind,
                 ArrayBind,
-                //ArrayNestedProperty
-                Method1Bind
-            }
-
-            
+                Method1Bind,
+                Method2Bind
+            }           
         }
 
         public class CSVLine

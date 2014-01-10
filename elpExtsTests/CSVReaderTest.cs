@@ -49,8 +49,37 @@ namespace elpExtsTests
                 this.propertyI = value;
             }
             #endregion
+        }
 
+        private class Method2TestClass
+        {
+            private int[] array;
 
+            public Method2TestClass()
+            {
+                array = new int[2];
+            }
+
+            public Method2TestClass(int[] ar)
+            {
+                this.array = ar;
+            }
+
+            public void SetElement(int index, int value)
+            {
+                array[index] = value;
+            }
+
+            public int[] GetArray()
+            {
+                int[] newArray = new int[array.Length];
+                for (int i = 0; i < array.Length; i++)
+                {
+                    newArray[i] = array[i];
+                }
+                return newArray;
+
+            }
         }
 
         [TestMethod]
@@ -98,6 +127,28 @@ namespace elpExtsTests
             {
                 Assert.AreEqual(expList[i].propertyI, list[i].propertyI);
                 Assert.AreEqual(expList[i].propertyS, list[i].propertyS);
+            }
+        }
+
+        [TestMethod]
+        public void TestMethod2()
+        {
+            List<Method2TestClass> list = new List<Method2TestClass>();
+            CSVReader csv = new CSVReader(@"Res\csvReader-Method2.csv", list);
+            csv.hasHeader = false;
+            csv.AddColumnMethod2("SetElement", 0, 0, true);
+            csv.AddColumnMethod2("SetElement", 1, 1, true);
+            list = (List<Method2TestClass>)csv.finalList;
+
+            List<Method2TestClass> expList = new List<Method2TestClass>();
+            expList.Add(new Method2TestClass(new int[] { 1, 10 }));
+            expList.Add(new Method2TestClass(new int[] { 2, 20 }));
+            expList.Add(new Method2TestClass(new int[] { 3, 30 }));
+
+            Assert.AreEqual(expList.Count, list.Count);
+            for (int i = 0; i < expList.Count; i++)
+            {
+                CollectionAssert.AreEqual(expList[i].GetArray(), list[i].GetArray());
             }
         }
     }
