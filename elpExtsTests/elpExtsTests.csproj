@@ -35,7 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -54,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CSVWriterTest.cs" />
     <Compile Include="CSVReaderTest.cs" />
+    <Compile Include="ColorGradientTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\elpexts\elpexts.csproj">
