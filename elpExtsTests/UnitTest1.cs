@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using elp87.Helpers;
 
 namespace elpExtsTests
 {
@@ -7,12 +8,12 @@ namespace elpExtsTests
     public class IniFiles
     {
         [TestMethod]
-        [ExpectedException(typeof(elp.Extensions.IncorrectIniLineException))]
+        [ExpectedException(typeof(IncorrectIniLineException))]
         public void iniTest()
         {
             string expectedAppName = "TradeStat";
             int expectedNum = 9;
-            elp.Extensions.IniFile ini = new elp.Extensions.IniFile(@"Res\iniTest.ini");
+            IniFile ini = new IniFile(@"Res\iniTest.ini");
             string appName = ini.GetSection("Main").GetParameter("AppName");
             int num = Convert.ToInt32(ini.GetSection("Main").GetParameter("int"));
             Assert.AreEqual(expectedAppName, appName);
@@ -23,7 +24,7 @@ namespace elpExtsTests
         [ExpectedException(typeof(System.IO.FileNotFoundException))]
         public void IniFileNotFoundTest()
         {
-            elp.Extensions.IniFile ini = new elp.Extensions.IniFile(@"Res\no.ini");
+            IniFile ini = new IniFile(@"Res\no.ini");
         }
     }
 }

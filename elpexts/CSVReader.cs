@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace elp.Extensions
+namespace elp87.Helpers
 {
     public class CSVReader : IEnumerable
     {

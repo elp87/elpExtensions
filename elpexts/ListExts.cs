@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace elp.Extensions
+namespace elp87.Helpers
 {
     public static class ListExts
     {

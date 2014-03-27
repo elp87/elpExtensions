@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace elp.Extensions
+namespace elp87.Helpers
 {
     public class IniFile
     {

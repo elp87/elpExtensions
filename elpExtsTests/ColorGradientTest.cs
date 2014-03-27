@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using elp.Extensions.Colors;
+using elp87.Helpers.Colors;
 
 namespace elpExtsTests
 {

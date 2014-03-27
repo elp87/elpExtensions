@@ -59,9 +59,9 @@
     <Compile Include="ColorGradientTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\elpexts\elpexts.csproj">
+    <ProjectReference Include="..\elpexts\elp87.Helpers.csproj">
       <Project>{9f397d69-a3d0-411f-b0ee-25c91a2f82e3}</Project>
-      <Name>elpexts</Name>
+      <Name>elp87.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

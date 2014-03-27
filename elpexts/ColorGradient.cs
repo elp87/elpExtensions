@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 
-namespace elp.Extensions.Colors
+namespace elp87.Helpers.Colors
 {
     public static class ColorGradient
     {

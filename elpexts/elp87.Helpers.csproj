@@ -8,8 +8,8 @@
     <ProjectGuid>{9F397D69-A3D0-411F-B0EE-25C91A2F82E3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>elp.Extensions</RootNamespace>
-    <AssemblyName>elpexts</AssemblyName>
+    <RootNamespace>elp87.Helpers</RootNamespace>
+    <AssemblyName>elp87.Helpers</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

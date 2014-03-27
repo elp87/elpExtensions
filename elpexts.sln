@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "elpexts", "elpexts\elpexts.csproj", "{9F397D69-A3D0-411F-B0EE-25C91A2F82E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "elp87.Helpers", "elpexts\elp87.Helpers.csproj", "{9F397D69-A3D0-411F-B0EE-25C91A2F82E3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "elpExtsTests", "elpExtsTests\elpExtsTests.csproj", "{61DF3061-04EF-4FA0-8266-FBBDCDF94B9E}"
 EndProject
