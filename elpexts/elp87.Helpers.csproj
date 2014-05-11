@@ -49,6 +49,7 @@
     <Compile Include="CSVExceptions.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="ListExts.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ColorGradient.cs" />
   </ItemGroup>
