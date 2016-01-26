@@ -58,6 +58,7 @@
     <Compile Include="CSVReaderTest.cs" />
     <Compile Include="ColorGradientTest.cs" />
     <Compile Include="LoggerTest.cs" />
+    <Compile Include="ArrayGenericsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\elpexts\elp87.Helpers.csproj">
