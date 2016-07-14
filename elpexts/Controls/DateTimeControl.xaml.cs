@@ -23,6 +23,7 @@ namespace elp87.Helpers.Controls
             DateCalendar.DataContext = _dtcContext;
             ResultTextBox.DataContext = _dtcContext;
             HourComboBox.DataContext = _dtcContext;
+            MinutesComboBox.DataContext = _dtcContext;
         }
 
         public DateTime Value => _dtcContext.Date;
@@ -45,6 +46,12 @@ namespace elp87.Helpers.Controls
         #endregion
 
         private void HourComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ResultTextBox.DataContext = null;
+            ResultTextBox.DataContext = _dtcContext;
+        }
+
+        private void MinutesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ResultTextBox.DataContext = null;
             ResultTextBox.DataContext = _dtcContext;

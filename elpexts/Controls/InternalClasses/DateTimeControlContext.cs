@@ -27,5 +27,11 @@ namespace elp87.Helpers.Controls.InternalClasses
             get { return _date.Hour; }
             set { _date = new DateTime(_date.Year, _date.Month, _date.Day, value, _date.Minute, _date.Second); }
         }
+
+        public int Minute
+        {
+            get { return _date.Minute; }
+            set { _date = new DateTime(_date.Year, _date.Month, _date.Day, _date.Hour, value, _date.Second); }
+        }
     }
 }
