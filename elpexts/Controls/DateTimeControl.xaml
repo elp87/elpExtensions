@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:elp87.Helpers.Controls"
              mc:Ignorable="d" Width="178.243" Height="232.218" >
     <Grid>
-        <TextBox x:Name="ResultTextBox" Height="23" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Top" Text="{Binding Value}"/>
+        <TextBox x:Name="ResultTextBox" Height="23" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Top" Text="{Binding Path=Date, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
         <Calendar x:Name="DateCalendar"  HorizontalAlignment="Left" Margin="0,33,0,0" VerticalAlignment="Top" Width="178" SelectedDate="{Binding Path=Date}"/>
-        <ComboBox x:Name="HourComboBox" HorizontalAlignment="Left" Margin="0,206,0,4" Width="50"/>
+        <ComboBox x:Name="HourComboBox" HorizontalAlignment="Left" Margin="0,206,0,4" Width="50" SelectedItem="{Binding Path=Hour}" SelectionChanged="HourComboBox_SelectionChanged"/>
         <ComboBox x:Name="MinutesComboBox" HorizontalAlignment="Left" Margin="128,206,0,4" Width="50"/>
     </Grid>
 </UserControl>
